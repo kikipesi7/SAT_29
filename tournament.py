@@ -1,3 +1,5 @@
+
+
 T = 3 # number of teams
 R = 4 # number of rounds
 
@@ -45,9 +47,8 @@ for i in range (1, T + 1):
         if i != j:
             for r1 in range (1, R + 1):
                 for r2 in range (r1 + 1, R + 1):
-                    round_condition_1 = ([-match_id[(i, j, r1)], match_id[(j, i, r2)]])
-                    round_condition_2 = ([match_id[(i, j, r1)], -match_id[(j, i, r2)]])
+                    round_condition = ([-match_id[(i, j, r1)], -match_id[(i, j, r2)]])
+                    clauses.append(round_condition)
 
-                    clauses.append(round_condition_1)
-                    clauses.append(round_condition_2)
-print(clauses)
+print (clauses)
+
