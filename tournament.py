@@ -50,5 +50,15 @@ for i in range (1, T + 1):
                     round_condition = ([-match_id[(i, j, r1)], -match_id[(i, j, r2)]])
                     clauses.append(round_condition)
 
-print (clauses)
+# Generate DIMACS file for the solver
+num_variables = counter - 1
+num_clauses = len(clauses)
 
+print (f"Number of variables: {num_variables} \nNumber of variables: {num_clauses}")
+
+with open("dimacs.cnf", "w") as dimacs_file:
+    dimacs_file.write(f"p cnf {num_variables} {num_clauses}\n")
+    for c in clauses:
+        for d in c:
+            dimacs_file.write(f"{d} ")
+        dimacs_file.write("0\n")
