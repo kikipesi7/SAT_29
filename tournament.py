@@ -11,5 +11,15 @@ for r in range (1, R + 1):
                      counter += 1 
 print (match_id)
 
-clausules = []
+clauses = []
 
+# Each team plays at least one match in every round
+for r in range (1, R + 1):
+    for i in range (1, T + 1):
+        clause = []
+        for j in range (1, T + 1):
+            if i != j:
+                clause.append(match_id[(i, j, r)])
+        clauses.append(clause)
+
+print(clauses)
