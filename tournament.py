@@ -38,4 +38,16 @@ for r in range (1, R + 1):
 
             clauses.append(impl_ij)
             clauses.append(impl_ji)
+
+#  Teams play together at most once per tournament
+for i in range (1, T + 1):
+    for j in range (1, T + 1):
+        if i != j:
+            for r1 in range (1, R + 1):
+                for r2 in range (r1 + 1, R + 1):
+                    round_condition_1 = ([-match_id[(i, j, r1)], match_id[(j, i, r2)]])
+                    round_condition_2 = ([match_id[(i, j, r1)], -match_id[(j, i, r2)]])
+
+                    clauses.append(round_condition_1)
+                    clauses.append(round_condition_2)
 print(clauses)
