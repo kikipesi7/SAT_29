@@ -29,4 +29,13 @@ for r in range (1, R + 1):
                 if i != j and i != k:
                     clauses.append([-match_id[(i, j, r)], -match_id[(i, k, r)]])
 
+# Matches are symmetric
+for r in range (1, R + 1):
+    for i in range (1, T + 1):
+        for j in range (i + 1, T + 1):
+            impl_ij = ([-match_id[(i, j, r)], match_id[(j, i, r)]])
+            impl_ji = ([match_id[(i, j, r)], -match_id[(j, i, r)]])
+
+            clauses.append(impl_ij)
+            clauses.append(impl_ji)
 print(clauses)
