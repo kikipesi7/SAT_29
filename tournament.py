@@ -1,7 +1,7 @@
+from pysat.solvers import Glucose4
 
-
-T = 3 # number of teams
-R = 4 # number of rounds
+T = 2 # number of teams
+R = 1 # number of rounds
 
 match_id = {}
 counter = 1
@@ -28,7 +28,7 @@ for r in range (1, R + 1):
     for i in range (1, T + 1):
          for j in range (1, T + 1):
             for k in range (1, T + 1):
-                if i != j and i != k:
+                if i != j and i != k and j < k :
                     clauses.append([-match_id[(i, j, r)], -match_id[(i, k, r)]])
 
 # Matches are symmetric
@@ -54,7 +54,7 @@ for i in range (1, T + 1):
 num_variables = counter - 1
 num_clauses = len(clauses)
 
-print (f"Number of variables: {num_variables} \nNumber of variables: {num_clauses}")
+print (f"Number of variables: {num_variables} \nNumber of clauses: {num_clauses}\n")
 
 with open("dimacs.cnf", "w") as dimacs_file:
     dimacs_file.write(f"p cnf {num_variables} {num_clauses}\n")
@@ -62,3 +62,27 @@ with open("dimacs.cnf", "w") as dimacs_file:
         for d in c:
             dimacs_file.write(f"{d} ")
         dimacs_file.write("0\n")
+
+# Using SAT solver Glucose 4
+with Glucose4(use_timer=True) as solver:
+    for clause in clauses:
+        solver.add_clause(clause)
+
+    is_sat = solver.solve()
+# Output
+    if is_sat:
+        print("result: SATISFIABLE\n")
+        model = solver.get_model()
+
+        for r in range (1, R + 1):
+            print(f"*** ROUND: {r} ***")
+            for i in range (1, T + 1):
+                for j in range (i +1, T + 1):
+                    current_match = match_id.get((i, j, r))
+                    if model[current_match - 1] > 0:
+                        print(f"team {i} vs team {j}")
+
+    else:
+        print("result: UNSATISFIABLE\n")
+
+    print(f"solver time: {solver.time():.4f} s")
