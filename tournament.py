@@ -1,7 +1,7 @@
 from pysat.solvers import Glucose4
 
-T = 2 # number of teams
-R = 1 # number of rounds
+T = int(input("number of teams:")) # number of teams
+R = int(input("number od rounds:")) # number of rounds
 
 match_id = {}
 counter = 1
@@ -50,6 +50,7 @@ for i in range (1, T + 1):
                     round_condition = ([-match_id[(i, j, r1)], -match_id[(i, j, r2)]])
                     clauses.append(round_condition)
 
+
 # Generate DIMACS file for the solver
 num_variables = counter - 1
 num_clauses = len(clauses)
@@ -62,6 +63,7 @@ with open("dimacs.cnf", "w") as dimacs_file:
         for d in c:
             dimacs_file.write(f"{d} ")
         dimacs_file.write("0\n")
+
 
 # Using SAT solver Glucose 4
 with Glucose4(use_timer=True) as solver:
